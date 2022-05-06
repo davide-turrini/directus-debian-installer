@@ -1,5 +1,5 @@
 # Directus installer (through Docker🐳 on Debian) 🚀
-### 1. Pick up a VPS on Hetzner (see [Hetzner](https://console.hetzner.cloud/)) 💸
+## 1. Pick up a VPS on Hetzner (see [Hetzner](https://console.hetzner.cloud/)) 💸
 
 - Go to https://console.hetzner.cloud/ and select for a VPS with the following params
     - Debian10-1vCPU-2GB
@@ -11,7 +11,7 @@
 
 and take note of the machine public IP address!
 
-## 1. Configure DNS (see [doc](https://indomus.it/guide/come-installare-e-configurare-caddy-con-docker-su-raspbian-di-raspberry-pi/)) 💻
+## 2. Configure DNS (see [doc](https://indomus.it/guide/come-installare-e-configurare-caddy-con-docker-su-raspbian-di-raspberry-pi/)) 💻
 
 You can safely skip this step if you already have a stable DNS setup.
 
@@ -76,9 +76,13 @@ Restrictions
 - **YOURIPADDRESS** - OPTIONAL - if left blank we detect IPv4 addresses, if you want to over-ride this, with a valid IPv4 or IPv6 address
 
 ## 3. Configure Caddy server (see [doc](https://caddyserver.com/)) ⚙️
-to create the Caddy files / folder type the following..
+to create the Directus/Caddy files / folder type the following..
 
 ```
+mkdir -m 777 ~/uploads
+mkdir -m 777 ~/database
+touch ~/database/db.sqlite
+chmod 777 -R ~/database
 mkdir -p ~/caddy/data
 nano ~/caddy/Caddyfile
 ```
@@ -97,17 +101,19 @@ bieffe.duckdns.org {
 curl https://raw.githubusercontent.com/davide-turrini/directus-debian-installer/master/install.sh > install.sh && chmod +x install.sh && sudo ./install.sh && rm -rf install.sh
 ```
 
-## 6. Download docker compose file (see [doc](https://strapi.io/documentation/developer-docs/latest/setup-deployment-guides/installation/docker.html#creating-a-strapi-project)) ⬇️
+## 5. Download docker compose file (see [doc](https://strapi.io/documentation/developer-docs/latest/setup-deployment-guides/installation/docker.html#creating-a-strapi-project)) ⬇️
 ```bash
 curl https://raw.githubusercontent.com/davide-turrini/directus-debian-installer/master/docker-compose.yaml > docker-compose.yaml
 ```
 
-## 7. Build image (see [doc](https://strapi.io/documentation/developer-docs/latest/setup-deployment-guides/installation/docker.html#creating-a-strapi-project)) 🛠️
+and change the `PUBLIC_URL` conf to your DOMAIN NAME.
+
+## 6. Build image (see [doc](https://strapi.io/documentation/developer-docs/latest/setup-deployment-guides/installation/docker.html#creating-a-strapi-project)) 🛠️
 ```bash
 sudo docker-compose pull
 ```
 
-## 8. Create container (see [doc](https://strapi.io/documentation/developer-docs/latest/setup-deployment-guides/installation/docker.html#creating-a-strapi-project)) ⏯️
+## 7. Create container (see [doc](https://strapi.io/documentation/developer-docs/latest/setup-deployment-guides/installation/docker.html#creating-a-strapi-project)) ⏯️
 Execute Docker image detaching the terminal
 ```bash
 sudo docker-compose up -d
