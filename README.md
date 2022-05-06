@@ -90,8 +90,25 @@ nano ~/caddy/Caddyfile
 and in the nano editor now add this
 
 ```
+
+(nocors) {
+  @options {
+    method OPTIONS
+  }
+
+  header {
+      Access-Control-Allow-Origin *
+      Access-Control-Allow-Credentials true
+      Access-Control-Allow-Methods *
+      Access-Control-Allow-Headers *
+  }
+  respond @options 204
+}
+
 bieffe.duckdns.org { 
   reverse_proxy directus:8055
+
+  import nocors
 }
 ```
 
