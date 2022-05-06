@@ -86,9 +86,8 @@ nano ~/caddy/Caddyfile
 and in the nano editor now add this
 
 ```
-https://subdomain.duckdns.org:443 { 
-  import https_header
-  reverse_proxy https://localhost:443
+bieffe.duckdns.org { 
+  reverse_proxy directus:8055
 }
 ```
 

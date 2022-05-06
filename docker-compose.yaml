@@ -1,16 +1,17 @@
 version: '3'
 services:
-  database:
-    container_name: database
-    image: postgis/postgis:13-master
-    volumes:
-      - ./data/database:/var/lib/postgresql/data
-    networks:
-      - directus
-    environment:
-      POSTGRES_USER: 'directus'
-      POSTGRES_PASSWORD: 'directus'
-      POSTGRES_DB: 'directus'
+  # uncomment to use post gres  
+  # database:
+  #   container_name: database
+  #   image: postgis/postgis:13-master
+  #   volumes:
+  #     - ./data/database:/var/lib/postgresql/data
+  #   networks:
+  #     - directus
+  #   environment:
+  #     POSTGRES_USER: 'directus'
+  #     POSTGRES_PASSWORD: 'directus'
+  #     POSTGRES_DB: 'directus'
 
   cache:
     container_name: cache
@@ -29,21 +30,24 @@ services:
       # local driver
       - ~/uploads:/directus/uploads
       # Make sure to also mount the volume when using SQLite
-      # - ./database:/directus/database
+      - ./database:/directus/database
       # If you want to load extensions from the host
       # - ./extensions:/directus/extensions
     networks:
       - directus
     depends_on:
       - cache
-      - database
+      # - database
     environment:
+      # remember to change these keys
       KEY: '255d861b-5ea1-5996-9aa3-922530ec40b1'
       SECRET: '6116487b-cda1-52c2-b5b5-c8022c45e263'
 
-      DB_CLIENT: 'pg'
-      DB_HOST: 'database'
-      DB_PORT: '5432'
+      DB_CLIENT: 'sqlite3'
+      DB_FILENAME: 'database.db'
+      # DB_CLIENT: 'pg'
+      # DB_HOST: 'database'
+      # DB_PORT: '5432'
       DB_DATABASE: 'directus'
       DB_USER: 'directus'
       DB_PASSWORD: 'directus'
@@ -63,14 +67,16 @@ services:
     container_name: caddy
     image: caddy:latest
     volumes:
-    - "~/caddy/Caddyfile:/etc/caddy/Caddyfile"
-    - "~/caddy/data:/data"
+      - "~/caddy/Caddyfile:/etc/caddy/Caddyfile"
+      - "~/caddy/data:/data"
     environment:
-    - "TZ=Europe/Rome"
+      - "TZ=Europe/Rome"
     restart: always
+    networks:
+      - directus
     ports:
-    - "80:80"
-    - "443:443"
+      - "80:80"
+      - "443:443"
 
 networks:
   directus:
