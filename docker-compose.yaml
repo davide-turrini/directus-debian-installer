@@ -32,7 +32,7 @@ services:
       # Make sure to also mount the volume when using SQLite
       - ~/database:/directus/database
       # If you want to load extensions from the host
-      # - ./extensions:/directus/extensions
+      - ~/extensions:/directus/extensions
     networks:
       - directus
     depends_on:
