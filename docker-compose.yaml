@@ -21,6 +21,11 @@ services:
 
   directus:
     container_name: directus
+    # command: >  
+    #  sh -c "
+    #    npm i mailgun-js
+    #    npx directus bootstrap && npx directus start
+    #  "
     image: directus/directus:latest
     ports:
       - 8055:8055
